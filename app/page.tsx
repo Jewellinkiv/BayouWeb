@@ -56,26 +56,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="film" aria-labelledby="film-title">
-        <div className="film-heading">
-          <p className="section-label section-label-light">The story on film</p>
-          <h2 id="film-title">See the vision for Bayou Bartholomew.</h2>
-          <p>
-            Hear the story behind the project and the effort to protect this
-            remarkable landscape near Pine Bluff, Arkansas.
-          </p>
-        </div>
-        <div className="film-frame">
-          <iframe
-            src="https://www.youtube-nocookie.com/embed/NA7EEA75oho?rel=0"
-            title="Bayou Bartholomew project in Pine Bluff, Arkansas"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          />
-        </div>
-      </section>
-
       <div className="current-line" aria-hidden="true">
         <span>Water remembers</span><i>·</i><span>Land endures</span><i>·</i>
         <span>Stories carry forward</span>
@@ -173,6 +153,26 @@ export default function Home() {
             Mississippi Valley.”
           </p>
           <span>— U.S. Fish &amp; Wildlife Service</span>
+        </div>
+      </section>
+
+      <section className="film" aria-labelledby="film-title">
+        <div className="film-heading">
+          <p className="section-label section-label-light">The story on film</p>
+          <h2 id="film-title">See the vision for Bayou Bartholomew.</h2>
+          <p>
+            Hear the story behind the project and the effort to protect this
+            remarkable landscape near Pine Bluff, Arkansas.
+          </p>
+        </div>
+        <div className="film-frame">
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/NA7EEA75oho?rel=0"
+            title="Bayou Bartholomew project in Pine Bluff, Arkansas"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
         </div>
       </section>
 
