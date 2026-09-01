@@ -98,3 +98,34 @@ actions tied to the current ChatGPT user. Leave public content anonymous.
 
 - [vinext Documentation](https://github.com/cloudflare/vinext)
 - [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+
+## Bayou Bartholomew site — what to edit
+
+The whole public site is one page: `app/page.tsx`, styled by `app/globals.css`.
+Content lives in plain arrays at the top of `page.tsx` (landings, features,
+funding rows, volunteer interests) — edit those rather than the JSX.
+
+### Things that are deliberately not wired up yet
+
+| What | Where | To finish |
+| --- | --- | --- |
+| Online donations | `app/config/donation.ts` | Set `provider` and `embedUrl`. Until then the donate section shows a "giving opens soon" panel with an email fallback. |
+| Emailed receipts | `app/config/donation.ts` (`receiptTemplate`) | Paste the template into the processor's receipt settings once the account exists. |
+| 501(c)(3) / EIN | `app/config/donation.ts` (`nonprofit`) | Fill in `ein` — it then appears on the donate section automatically. |
+| Volunteer form | `app/config/donation.ts` (`volunteerFormEndpoint`) | Point at a real form handler. Empty = an email contact block instead of a dead form. |
+
+The family canoe video is already in place at `public/media/canoe-family.mp4`,
+wired up through `app/config/media.ts` (720 × 1280, 8s, H.264 + AAC, faststart).
+It renders with controls and no autoplay.
+
+### Funding figures
+
+`raised` and `costs` in `app/page.tsx` are the source of truth. The committed
+total, project total, remaining gap and progress meter are all computed from
+them — change a row and every number on the page follows.
+
+### Known content question
+
+The deck says Bayou Bartholomew is **364 miles**; the site says **359 river
+miles** (matching Arkansas Game & Fish). The site currently keeps 359. Pick one
+and update the fact ribbon and the route strip together.

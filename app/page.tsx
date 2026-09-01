@@ -1,13 +1,154 @@
 import type { Metadata } from "next";
+import {
+  donation,
+  donationIsLive,
+  volunteerFormEndpoint,
+} from "./config/donation";
+import {
+  canoeVideoAspect,
+  canoeVideoPoster,
+  canoeVideoSrc,
+} from "./config/media";
 
 export const metadata: Metadata = {
   title: "Bayou Bartholomew | A Conservation Legacy",
   description:
-    "Discover Bayou Bartholomew and the story of a family-led effort to protect this remarkable Delta waterway for generations to come.",
+    "The Bayou Bartholomew Recreation Enhancement Plan: three public landings, 4.5 miles of bank fishing and nine miles of trail on the longest bayou in the United States, in Pine Bluff, Arkansas.",
 };
 
 const agfcTrail =
   "https://www.agfc.com/things-to-do/water-trails/bayou-bartholomew-water-trail/";
+
+const usd = (value: number) => `$${value.toLocaleString("en-US")}`;
+
+/** Committed to date — cash grants, private gifts and donated land. */
+const raised = [
+  { source: "Arkansas Game & Fish Commission", amount: 683000 },
+  { source: "Donation of 40 acres", amount: 120000 },
+  { source: "Donation of 17 acres", amount: 95000 },
+  { source: "Donation of the Robinette property", amount: 52000 },
+  { source: "Saracen Bayou Landing", amount: 25000 },
+  { source: "Private donations", amount: 10000 },
+  { source: "Donation for stocking", amount: 5000 },
+];
+
+/** The full build-out, line by line. */
+const costs = [
+  { item: "4.5 miles of red clay and #8 blue stone pathway", amount: 300000 },
+  { item: "Steel and concrete bridge at Hazel Street Landing", amount: 175000 },
+  { item: "Steel and concrete bridge at Olive Street Landing", amount: 175000 },
+  { item: "60′ extend-hoe with operator ($3,500 per day)", amount: 140000 },
+  { item: "Playground equipment at Olive Landing", amount: 95000 },
+  { item: "Bathroom and septic system at Saracen Landing", amount: 50000 },
+  { item: "Materials for the boardwalk at Olive Landing", amount: 45000 },
+  { item: "Two pavilions with concrete pads at Saracen Landing", amount: 30000 },
+  { item: "Dozer operator", amount: 29600 },
+  { item: "Engineering and survey work", amount: 25000 },
+  { item: "Floating trackhoe", amount: 24000 },
+  { item: "Mulching machine and operator", amount: 18000 },
+  { item: "Pipes and gravel", amount: 16000 },
+  { item: "Fencing at Saracen and Hazel landings", amount: 15000 },
+  { item: "Signage for all three landings", amount: 15000 },
+  { item: "Extra labor", amount: 14400 },
+  { item: "Stump grinding", amount: 10000 },
+  { item: "Park benches at Hazel Landing and park", amount: 5200 },
+];
+
+const totalRaised = raised.reduce((sum, row) => sum + row.amount, 0);
+const totalCost = costs.reduce((sum, row) => sum + row.amount, 0);
+const stillNeeded = totalCost - totalRaised;
+const percentFunded = Math.round((totalRaised / totalCost) * 100);
+
+const landings = [
+  {
+    number: "01",
+    kicker: "Northern anchor",
+    name: "Saracen Bayou Landing",
+    image: "/images/plan/saracen-bayou-access-plan.jpg",
+    alt: "Aerial site plan of Saracen Bayou Landing showing a proposed boat ramp and staircase where the access road meets the bayou",
+    caption: "Saracen Bayou Landing · off Old Warren Road",
+    body: "Where the project begins, just off Old Warren Road. A boat ramp and staircase carry paddlers down to the water. Southwood Creek, the Turkey Chute with stairs, and Bill's Fork are all within a short walk.",
+    status: "Landing and road access completed",
+  },
+  {
+    number: "02",
+    kicker: "Mid-corridor",
+    name: "Hazel Street Landing",
+    image: "/images/plan/hazel-street-landing-plan.jpg",
+    alt: "Aerial site plan of Hazel Street Landing showing the proposed landing, a bank fishing area and a new bridge crossing the bayou near Highway 65",
+    caption: "Hazel Street Landing · near Highway 65",
+    body: "The middle of the corridor, with bank fishing along the water and a new steel and concrete bridge carrying the trail across the bayou. The channel is already open from Old Warren Road to here.",
+    status: "Bayou opened · bridge proposed",
+  },
+  {
+    number: "03",
+    kicker: "Southern end",
+    name: "Olive Street Landing",
+    image: "/images/plan/olive-street-landing-plan.jpg",
+    alt: "Aerial site plan of Olive Street Landing showing a proposed boardwalk, ramp and bridge opening onto Byrd Lake",
+    caption: "Olive Street Landing · onto Byrd Lake",
+    body: "A boardwalk, ramp and bridge open onto Byrd Lake at the southern end. Playground equipment and the boardwalk materials are the largest remaining pieces here.",
+    status: "Proposed",
+  },
+];
+
+const features = [
+  {
+    kicker: "Enjoyment",
+    name: "Bike Fun Park",
+    image: "/images/plan/bike-fun-park-reference.jpg",
+    alt: "Aerial photograph of a dirt bike skills park with pump tracks, berms and jump lines — a reference image of a comparable facility, not the Pine Bluff site",
+    caption: "Reference image of a comparable bike park · not the Pine Bluff site",
+    body: "A dirt skills park with pump tracks and jump lines near the Saracen end of the corridor, beside Southwood Elementary and the school district property.",
+  },
+  {
+    kicker: "Centerpiece",
+    name: "Proposed Nature Center",
+    image: "/images/plan/proposed-nature-center-plan.jpg",
+    alt: "Site plan rendering of the proposed outdoor recreation and nature center, showing a tree-lined green, pathways and a structure beside the bayou",
+    caption: "Proposed outdoor recreation center and kayak launch",
+    body: "An outdoor recreation and nature center with a kayak launch, sitting between the Bike Fun Park and the water. Still a proposal — the location is identified, the building is not yet funded.",
+  },
+  {
+    kicker: "Trail connection",
+    name: "Linking to the Bill Laird Trail",
+    image: "/images/plan/bill-laird-trail-connection-plan.jpg",
+    alt: "Plan drawing showing the proposed bike trail crossing a new bridge near Hazel Street and connecting to the existing Bill Laird Trail",
+    caption: "Connection to the Bill Laird Trail · City of Pine Bluff",
+    body: "The bike trail crosses the new bridge, circles back and runs to Olive Street, tying into the Bill Laird Trail and the Hampstead Inn — and into the commercial district beyond it.",
+  },
+];
+
+const accomplished = [
+  "Old Warren Road and Saracen Landing completed",
+  "Bridge at South Wood Creek completed",
+  "Bayou opened from Old Warren Road to Hazel Street",
+  "Three tracts of land secured from Old Warren Road to Hazel Street",
+  "Over 20,000 bass, bream and catfish stocked",
+];
+
+const future = [
+  { figure: "4.5", unit: "miles", label: "of bank fishing" },
+  { figure: "9–10", unit: "miles", label: "of biking trail" },
+  { figure: "9", unit: "miles", label: "of float and fishing water" },
+  { figure: "20,000", unit: "fish", label: "stocked and growing" },
+];
+
+const partners = [
+  "Arkansas Game & Fish Commission",
+  "Bayou Bartholomew Alliance",
+  "City of Pine Bluff",
+  "Arkansas Natural Heritage Commission",
+];
+
+const volunteerInterests = [
+  "Trail work days",
+  "Cleanups",
+  "Planting and habitat work",
+  "Events and outreach",
+  "Bird counts and surveys",
+  "Skilled trades and equipment",
+];
 
 export default function Home() {
   return (
@@ -27,8 +168,10 @@ export default function Home() {
           <nav aria-label="Primary navigation">
             <a href="#story">Our story</a>
             <a href="#bayou">The bayou</a>
+            <a href="#project">The project</a>
             <a href="#explore">Explore</a>
-            <a className="nav-cta" href="#stewardship">Get involved</a>
+            <a href="#get-involved">Get involved</a>
+            <a className="nav-cta" href="#donate">Donate</a>
           </nav>
         </header>
 
@@ -37,15 +180,16 @@ export default function Home() {
           <h1>Where a childhood refuge becomes a legacy of conservation.</h1>
           <p className="hero-copy">
             Along the quiet bends of Bayou Bartholomew, a treasured piece of the
-            Arkansas Delta is being protected—so its water, woods, wildlife, and
-            wonder can endure.
+            Arkansas Delta is being protected—and opened to the public. Three
+            landings, nine miles of water, and a corridor of trail through one of
+            the most biologically diverse streams in North America.
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#story">
-              Discover the story <span aria-hidden="true">↗</span>
+            <a className="button button-primary" href="#project">
+              See the project <span aria-hidden="true">↗</span>
             </a>
-            <a className="text-link" href="#bayou">
-              Meet the bayou <span aria-hidden="true">↓</span>
+            <a className="text-link" href="#story">
+              Read the story <span aria-hidden="true">↓</span>
             </a>
           </div>
         </div>
@@ -72,6 +216,13 @@ export default function Home() {
               left him.
             </p>
             <p>
+              It started when he was eight years old. His family had a fork on
+              the bayou; there is still a sign on the flood trail that reads
+              <em> Bill&rsquo;s Fork</em>. He swam in it, fished in it, and spent
+              entire summers along its banks—right near the Saracen Bayou
+              landing, which is where this project now begins.
+            </p>
+            <p>
               Years later, Bill purchased land along the bayou and chose to
               protect it. What began as a deeply personal connection is becoming
               a charitable conservation effort: caring for the habitat, honoring
@@ -85,15 +236,31 @@ export default function Home() {
           </div>
         </div>
 
-        <figure className="story-figure">
-          <img
-            src="/images/little-bayou-wma.jpg"
-            alt="Cypress trees lining the shaded waters of Little Bayou Wildlife Management Area"
-            loading="lazy"
-          />
+        <figure className="story-figure story-figure-video">
+          {canoeVideoSrc ? (
+            <video
+              className="canoe-video"
+              style={{ aspectRatio: canoeVideoAspect }}
+              src={canoeVideoSrc}
+              poster={canoeVideoPoster}
+              controls
+              playsInline
+              loop
+              preload="none"
+            />
+          ) : (
+            /* TODO: drop the clip at public/media/canoe-family.mp4 and set
+               canoeVideoSrc in app/config/media.ts — this figure becomes the
+               video player automatically. */
+            <img
+              src={canoeVideoPoster}
+              alt="A family paddling a canoe down Bayou Bartholomew on an autumn afternoon, a child in a life jacket in the bow"
+              loading="lazy"
+            />
+          )}
           <figcaption>
-            <span>Little Bayou WMA</span>
-            <span>Ashley County, Arkansas</span>
+            <span>A family morning on the bayou</span>
+            <span>Pine Bluff, Arkansas</span>
           </figcaption>
         </figure>
       </section>
@@ -129,6 +296,37 @@ export default function Home() {
             lives.
           </p>
         </div>
+
+        <ol className="timeline" aria-label="A short history of Bayou Bartholomew">
+          <li>
+            <span className="timeline-when">About 2,000 years ago</span>
+            <p>
+              The Arkansas River shifts course and leaves its old channel
+              behind. The bayou is what remains.
+            </p>
+          </li>
+          <li>
+            <span className="timeline-when">1687</span>
+            <p>
+              Named for a member of French explorer Henri Joutel&rsquo;s
+              expedition through the region.
+            </p>
+          </li>
+          <li>
+            <span className="timeline-when">1830s–1890s</span>
+            <p>
+              A steamboat highway carrying cotton and timber out of the Delta,
+              until the railroads take the trade away.
+            </p>
+          </li>
+          <li>
+            <span className="timeline-when">Today</span>
+            <p>
+              One of the two most biologically diverse streams in North America,
+              running from Pine Bluff to the Ouachita River in Louisiana.
+            </p>
+          </li>
+        </ol>
 
         <div className="route" aria-label="The route of Bayou Bartholomew">
           <div className="route-stop route-origin">
@@ -181,10 +379,10 @@ export default function Home() {
           <p className="section-label">03 · A corridor of uncommon life</p>
           <h2>More than a waterway. A world in motion.</h2>
           <p>
-            The bayou’s bends, wooded banks, and wetlands form a continuous
-            refuge. Fish move below the surface; mussels filter the current;
-            turtles bask on fallen timber; songbirds and waterfowl follow the
-            water through the seasons.
+            Cypress swamps, bottomland hardwoods, and wetlands make this one of
+            the richest wildlife habitats in Arkansas. Fish move below the
+            surface; mussels filter the current; turtles bask on fallen timber;
+            songbirds and waterfowl follow the water through the seasons.
           </p>
         </div>
 
@@ -220,17 +418,274 @@ export default function Home() {
             </ul>
           </div>
         </div>
+
+        <div className="transition-note">
+          <div>
+            <p className="section-label">Four and a half miles</p>
+            <h3>You start in full shade and break into open marsh.</h3>
+          </div>
+          <p>
+            In a single stretch the corridor moves from bottomland hardwood to
+            marsh. You are narrow and completely shaded from Saracen all the way
+            to Hazel Street—and then it opens, and there are ducks and wood
+            ducks and animals everywhere. It feels like a different place
+            entirely. Egret rookeries line the bayou. At any moment on this
+            float, in all that quiet, you are about twenty minutes from downtown.
+          </p>
+          <figure className="transition-figure">
+            <img
+              src="/images/little-bayou-wma.jpg"
+              alt="Cypress trees lining the shaded waters of Little Bayou Wildlife Management Area"
+              loading="lazy"
+            />
+            <figcaption>
+              <span>Little Bayou WMA</span>
+              <span>Ashley County, Arkansas</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div className="species-groups">
+          <article>
+            <h3>Mammals</h3>
+            <ul>
+              <li>White-tailed deer</li>
+              <li>Raccoons &amp; opossums</li>
+              <li>River otters, beavers &amp; muskrats</li>
+              <li>Mink</li>
+              <li>Gray &amp; red foxes</li>
+              <li>Gray &amp; fox squirrels</li>
+              <li>Swamp rabbits &amp; cottontails</li>
+              <li>Black bears &amp; Louisiana black bears</li>
+            </ul>
+          </article>
+          <article>
+            <h3>Birds</h3>
+            <ul>
+              <li>Mallards &amp; wood ducks</li>
+              <li>Hooded mergansers</li>
+              <li>Great egrets &amp; herons</li>
+              <li>Migratory songbirds</li>
+            </ul>
+          </article>
+          <article>
+            <h3>Reptiles &amp; amphibians</h3>
+            <ul>
+              <li>American alligators</li>
+              <li>Basking turtles</li>
+              <li>Water snakes</li>
+            </ul>
+          </article>
+          <article>
+            <h3>Fish · 100+ species</h3>
+            <ul>
+              <li>Crappie &amp; bream</li>
+              <li>Catfish</li>
+              <li>Bass</li>
+              <li>Alligator gar</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section className="project section-dark" id="project">
+        <div className="project-inner">
+          <div className="project-heading">
+            <p className="section-label section-label-light">04 · The project</p>
+            <h2>The Recreation Enhancement Plan.</h2>
+            <p>
+              Three public landings, a connected trail corridor, and nine miles
+              of open water through the heart of Pine Bluff. Some of it is
+              finished. Most of it is drawn, permitted, and waiting on funding.
+            </p>
+          </div>
+
+          <figure className="corridor-map">
+            <img
+              src="/images/plan/corridor-site-map.jpg"
+              alt="Site selection map of the Bayou Bartholomew Recreation Enhancement corridor, showing Saracen Bayou Landing at the north, the Bike Fun Park and proposed outdoor recreation center, Hazel Street Landing in the middle, the Bill Laird Trail connection, and the existing put-in near Olive Street at the south"
+              loading="lazy"
+            />
+            <figcaption>
+              <span>Recreation Enhancement · site selection</span>
+              <span>Pine Bluff, Arkansas</span>
+            </figcaption>
+          </figure>
+
+          <div className="landings">
+            <h3 className="block-title">Three landings</h3>
+            {landings.map((landing) => (
+              <article className="landing" key={landing.name}>
+                <figure>
+                  <img src={landing.image} alt={landing.alt} loading="lazy" />
+                  <figcaption>{landing.caption}</figcaption>
+                </figure>
+                <div className="landing-copy">
+                  <p className="landing-kicker">
+                    <span aria-hidden="true">{landing.number}</span>
+                    {landing.kicker}
+                  </p>
+                  <h4>{landing.name}</h4>
+                  <p>{landing.body}</p>
+                  <p className="landing-status">{landing.status}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="features">
+            <h3 className="block-title">What connects them</h3>
+            <div className="feature-grid">
+              {features.map((feature) => (
+                <article className="feature" key={feature.name}>
+                  <figure>
+                    <img src={feature.image} alt={feature.alt} loading="lazy" />
+                    <figcaption>{feature.caption}</figcaption>
+                  </figure>
+                  <p className="feature-kicker">{feature.kicker}</p>
+                  <h4>{feature.name}</h4>
+                  <p>{feature.body}</p>
+                </article>
+              ))}
+            </div>
+            <div className="feature-footnote">
+              <figure>
+                <img
+                  src="/images/plan/saracen-landing-rec-center-plan.jpg"
+                  alt="Plan map of the northern end of the corridor, labelling Saracen Bayou Landing, Southwood Creek, Bill's Fork, the Turkey Chute with stairs, the Bike Fun Park and the potential outdoor recreation center and kayak launch"
+                  loading="lazy"
+                />
+                <figcaption>The northern cluster · Saracen to the Turkey Chute</figcaption>
+              </figure>
+              <p>
+                From Ohio Street the route carries on into the Byrd Lake Natural
+                Area, with wolf tracks painted in the street to guide riders all
+                the way to the casino. Wooden bridges cross the wet ground along
+                the way, and there is a place overlooking Cypress Lake quiet
+                enough to hold a wedding.
+              </p>
+            </div>
+          </div>
+
+          <div className="progress-block">
+            <h3 className="block-title">Where the money stands</h3>
+            <div className="progress-figures">
+              <div>
+                <strong>{usd(totalRaised)}</strong>
+                <span>committed to date</span>
+              </div>
+              <div>
+                <strong>{usd(totalCost)}</strong>
+                <span>total project cost</span>
+              </div>
+              <div className="progress-gap">
+                <strong>{usd(stillNeeded)}</strong>
+                <span>still to raise</span>
+              </div>
+            </div>
+            <div
+              className="progress-meter"
+              role="img"
+              aria-label={`${percentFunded} percent funded: ${usd(totalRaised)} committed of ${usd(totalCost)}`}
+            >
+              <span style={{ width: `${percentFunded}%` }} />
+            </div>
+            <p className="progress-caption">
+              {percentFunded}% funded · includes cash grants, private gifts and
+              donated land
+            </p>
+
+            <div className="ledger">
+              <div className="ledger-column">
+                <h4>Committed · {usd(totalRaised)}</h4>
+                <table>
+                  <caption className="visually-hidden">
+                    Funding committed to the Bayou Bartholomew Recreation
+                    Enhancement Plan by source
+                  </caption>
+                  <tbody>
+                    {raised.map((row) => (
+                      <tr key={row.source}>
+                        <th scope="row">{row.source}</th>
+                        <td>{usd(row.amount)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="ledger-column">
+                <h4>Where it goes · {usd(totalCost)}</h4>
+                <table>
+                  <caption className="visually-hidden">
+                    Full project cost of the Bayou Bartholomew Recreation
+                    Enhancement Plan by line item
+                  </caption>
+                  <tbody>
+                    {costs.map((row) => (
+                      <tr key={row.item}>
+                        <th scope="row">{row.item}</th>
+                        <td>{usd(row.amount)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <a className="button button-light" href="#donate">
+              Help close the gap <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+
+          <div className="ledgers-narrative">
+            <div className="done">
+              <h3 className="block-title">Already done</h3>
+              <ul>
+                {accomplished.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="ahead">
+              <h3 className="block-title">When it is finished</h3>
+              <div className="future-grid">
+                {future.map((item) => (
+                  <div key={item.label}>
+                    <strong>{item.figure}</strong>
+                    <span className="future-unit">{item.unit}</span>
+                    <span>{item.label}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="ahead-note">
+                Electric motors and paddle craft only. Excellent fishing waters,
+                beautiful biking trails, and a significant economic lift for
+                Pine Bluff and Southeast Arkansas.
+              </p>
+            </div>
+          </div>
+
+          <div className="partners">
+            <p className="section-label section-label-light">In partnership with</p>
+            <ul>
+              {partners.map((partner) => (
+                <li key={partner}>{partner}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </section>
 
       <section className="explore" id="explore">
         <div className="explore-image" role="img" aria-label="Bayou Bartholomew winding through autumn wetlands near Pine Bluff" />
         <div className="explore-panel">
-          <p className="section-label section-label-light">04 · Experience it gently</p>
+          <p className="section-label section-label-light">05 · Experience it gently</p>
           <h2>Walk softly.<br />Paddle slowly.<br />Look closely.</h2>
           <p>
-            Low-impact walking and canoe trails are part of the vision for the
-            protected property—ways to move through the landscape at its own pace,
-            with conservation always leading the way.
+            When the corridor is complete it will hold a nine-mile float,
+            4.5 miles of bank fishing, nine to ten miles of biking trail, and
+            some of the best bird watching in the Delta—all of it electric motor
+            or paddle only, so the water stays quiet.
           </p>
           <p className="explore-detail">
             For current public paddling, Arkansas Game &amp; Fish Commission maintains
@@ -246,7 +701,7 @@ export default function Home() {
 
       <section className="stewardship section" id="stewardship">
         <div className="stewardship-title">
-          <p className="section-label">05 · The work of keeping wild places wild</p>
+          <p className="section-label">06 · The work of keeping wild places wild</p>
           <h2>Conservation is a long promise.</h2>
         </div>
         <div className="stewardship-copy">
@@ -275,6 +730,163 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="involve section" id="get-involved">
+        <div className="involve-heading">
+          <p className="section-label">07 · Get involved</p>
+          <h2>This gets built by people who show up.</h2>
+          <p>
+            Trail work days, cleanups, planting, bird counts, an afternoon with a
+            chainsaw or a tractor—there is a place here for whatever you have to
+            give. Tell us how you would like to help and we will be in touch
+            when the next work day is set.
+          </p>
+        </div>
+
+        <div className="involve-form">
+          {volunteerFormEndpoint ? (
+            <form method="post" action={volunteerFormEndpoint}>
+              <div className="field-row">
+                <p className="field">
+                  <label htmlFor="volunteer-name">Name</label>
+                  <input id="volunteer-name" name="name" type="text" autoComplete="name" required />
+                </p>
+                <p className="field">
+                  <label htmlFor="volunteer-email">Email</label>
+                  <input id="volunteer-email" name="email" type="email" autoComplete="email" required />
+                </p>
+              </div>
+              <p className="field">
+                <label htmlFor="volunteer-phone">Phone <span>optional</span></label>
+                <input id="volunteer-phone" name="phone" type="tel" autoComplete="tel" />
+              </p>
+              <fieldset className="field">
+                <legend>What are you interested in?</legend>
+                <div className="checks">
+                  {volunteerInterests.map((interest) => (
+                    <label key={interest}>
+                      <input type="checkbox" name="interests" value={interest} />
+                      <span>{interest}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+              <p className="field">
+                <label htmlFor="volunteer-message">Anything else? <span>optional</span></label>
+                <textarea id="volunteer-message" name="message" rows={4} />
+              </p>
+              <button className="button button-primary" type="submit">
+                Sign me up <span aria-hidden="true">↗</span>
+              </button>
+            </form>
+          ) : (
+            /* TODO: set volunteerFormEndpoint in app/config/donation.ts to a real
+               form handler (Formspree, Basin, a Worker route) and this becomes a
+               working form. Until then we show a contact block rather than a form
+               that goes nowhere. */
+            <div className="involve-fallback">
+              <p className="lead">Email us and we will put you on the list.</p>
+              <a className="button button-primary" href={`mailto:${donation.contactEmail}?subject=Volunteering%20on%20Bayou%20Bartholomew`}>
+                {donation.contactEmail} <span aria-hidden="true">↗</span>
+              </a>
+              <p className="involve-fallback-note">
+                Tell us your name, the best number to reach you, and what kind of
+                work you would enjoy—trail days, cleanups, planting, events, bird
+                counts, or equipment and skilled trades.
+              </p>
+            </div>
+          )}
+
+          <aside className="involve-aside">
+            <figure className="involve-figure">
+              <img
+                src="/images/canoe-family-02.jpg"
+                alt="A woman smiling over her shoulder from the stern of a canoe while two boys paddle ahead of her on Bayou Bartholomew"
+                loading="lazy"
+              />
+            </figure>
+            <h3>Landowners and partners</h3>
+            <p>
+              Much of this corridor exists because neighbors donated or sold land
+              at the right moment. If you own property along the bayou, or your
+              organization wants to take on a piece of the work, we would like to
+              talk.
+            </p>
+            <a className="text-link text-link-dark" href={`mailto:${donation.contactEmail}?subject=Partnering%20on%20Bayou%20Bartholomew`}>
+              Start a conversation <span aria-hidden="true">↗</span>
+            </a>
+          </aside>
+        </div>
+      </section>
+
+      <section className="donate section-dark" id="donate">
+        <div className="donate-inner">
+          <div className="donate-heading">
+            <p className="section-label section-label-light">08 · Support the project</p>
+            <h2>{usd(stillNeeded)} stands between here and finished.</h2>
+            <p>
+              Every gift goes into the ground: gravel and clay for the pathway,
+              steel for the bridges, benches, signs, and fish in the water. Give
+              once, or give monthly and carry a piece of it all year.
+            </p>
+          </div>
+
+          <div className="donate-panel">
+            {donationIsLive ? (
+              <div className="donate-embed">
+                <iframe
+                  src={donation.embedUrl}
+                  title="Donate to the Bayou Bartholomew Recreation Enhancement Plan"
+                  height={donation.embedHeight}
+                  loading="lazy"
+                  allow="payment"
+                />
+              </div>
+            ) : (
+              /* TODO: giving is not open yet. Set `provider` and `embedUrl` in
+                 app/config/donation.ts and this becomes the live donation form —
+                 one-time and monthly, with the tiers below as suggested amounts. */
+              <div className="donate-soon">
+                <p className="donate-soon-title">Giving opens soon.</p>
+                <p>
+                  The nonprofit paperwork is being finalized. As soon as it clears
+                  we will open online giving here—one-time or monthly, with an
+                  emailed receipt for your records.
+                </p>
+                <a className="button button-primary" href={`mailto:${donation.contactEmail}?subject=Giving%20to%20Bayou%20Bartholomew`}>
+                  Give today by check or transfer <span aria-hidden="true">↗</span>
+                </a>
+                <p className="donate-soon-note">
+                  Prefer to give now? Email {donation.contactEmail} and we will
+                  send the details.
+                </p>
+              </div>
+            )}
+
+            <div className="donate-tiers">
+              <h3>What a gift does</h3>
+              <ul>
+                {donation.tiers.map((tier) => (
+                  <li key={tier.amount}>
+                    <strong>{usd(tier.amount)}</strong>
+                    <span>{tier.label}</span>
+                  </li>
+                ))}
+              </ul>
+              {donation.recurringEnabled ? (
+                <p className="donate-recurring">
+                  Monthly giving will be available alongside one-time gifts.
+                </p>
+              ) : null}
+              <p className="donate-fineprint">
+                {donation.nonprofit.name}
+                {donation.nonprofit.ein ? ` · EIN ${donation.nonprofit.ein}` : ""}
+                . {donation.nonprofit.deductibilityNote}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="closing">
         <p className="closing-kicker">Bayou Bartholomew</p>
         <h2>What we protect today can keep flowing far beyond us.</h2>
@@ -299,12 +911,18 @@ export default function Home() {
           <p>Photography</p>
           <a href="https://commons.wikimedia.org/wiki/File:Bayou_Bartholomew_near_Pine_Bluff,_AR.jpg" target="_blank" rel="noreferrer">Keith Yahl · CC BY 2.0 ↗</a>
           <a href="https://commons.wikimedia.org/wiki/Category:Bayou_Bartholomew" target="_blank" rel="noreferrer">Brandon Rush · CC0 ↗</a>
+          <span className="footer-credit-note">Site plans · Bayou Bartholomew Recreation Enhancement</span>
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} Bayou Bartholomew</span>
           <span>bayoubartholomew.com</span>
         </div>
       </footer>
+
+      <div className="action-bar">
+        <a className="action-bar-secondary" href="#get-involved">Volunteer</a>
+        <a className="action-bar-primary" href="#donate">Donate</a>
+      </div>
     </main>
   );
 }
