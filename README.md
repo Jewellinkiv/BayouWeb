@@ -113,7 +113,10 @@ funding rows, volunteer interests) — edit those rather than the JSX.
 | Emailed receipts | `app/config/donation.ts` (`receiptTemplate`) | Paste the template into the processor's receipt settings once the account exists. |
 | 501(c)(3) / EIN | `app/config/donation.ts` (`nonprofit`) | Fill in `ein` — it then appears on the donate section automatically. |
 | Volunteer form | `app/config/donation.ts` (`volunteerFormEndpoint`) | Point at a real form handler. Empty = an email contact block instead of a dead form. |
-| Family canoe video | `app/config/media.ts` (`canoeVideoSrc`) | Drop the clip at `public/media/canoe-family.mp4` and set the path. The story figure swaps from photo to video player. |
+
+The family canoe video is already in place at `public/media/canoe-family.mp4`,
+wired up through `app/config/media.ts` (720 × 1280, 8s, H.264 + AAC, faststart).
+It renders with controls and no autoplay.
 
 ### Funding figures
 

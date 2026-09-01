@@ -245,7 +245,6 @@ export default function Home() {
               poster={canoeVideoPoster}
               controls
               playsInline
-              muted
               loop
               preload="none"
             />
