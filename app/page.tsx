@@ -19,46 +19,6 @@ export const metadata: Metadata = {
 const agfcTrail =
   "https://www.agfc.com/things-to-do/water-trails/bayou-bartholomew-water-trail/";
 
-const usd = (value: number) => `$${value.toLocaleString("en-US")}`;
-
-/** Committed to date — cash grants, private gifts and donated land. */
-const raised = [
-  { source: "Arkansas Game & Fish Commission", amount: 683000 },
-  { source: "Donation of 40 acres", amount: 120000 },
-  { source: "Donation of 17 acres", amount: 95000 },
-  { source: "Donation of the Robinette property", amount: 52000 },
-  { source: "Saracen Bayou Landing", amount: 25000 },
-  { source: "Private donations", amount: 10000 },
-  { source: "Donation for stocking", amount: 5000 },
-];
-
-/** The full build-out, line by line. */
-const costs = [
-  { item: "4.5 miles of red clay and #8 blue stone pathway", amount: 300000 },
-  { item: "Steel and concrete bridge at Hazel Street Landing", amount: 175000 },
-  { item: "Steel and concrete bridge at Olive Street Landing", amount: 175000 },
-  { item: "60′ extend-hoe with operator ($3,500 per day)", amount: 140000 },
-  { item: "Playground equipment at Olive Landing", amount: 95000 },
-  { item: "Bathroom and septic system at Saracen Landing", amount: 50000 },
-  { item: "Materials for the boardwalk at Olive Landing", amount: 45000 },
-  { item: "Two pavilions with concrete pads at Saracen Landing", amount: 30000 },
-  { item: "Dozer operator", amount: 29600 },
-  { item: "Engineering and survey work", amount: 25000 },
-  { item: "Floating trackhoe", amount: 24000 },
-  { item: "Mulching machine and operator", amount: 18000 },
-  { item: "Pipes and gravel", amount: 16000 },
-  { item: "Fencing at Saracen and Hazel landings", amount: 15000 },
-  { item: "Signage for all three landings", amount: 15000 },
-  { item: "Extra labor", amount: 14400 },
-  { item: "Stump grinding", amount: 10000 },
-  { item: "Park benches at Hazel Landing and park", amount: 5200 },
-];
-
-const totalRaised = raised.reduce((sum, row) => sum + row.amount, 0);
-const totalCost = costs.reduce((sum, row) => sum + row.amount, 0);
-const stillNeeded = totalCost - totalRaised;
-const percentFunded = Math.round((totalRaised / totalCost) * 100);
-
 const landings = [
   {
     number: "01",
@@ -107,7 +67,7 @@ const features = [
     image: "/images/plan/proposed-nature-center-plan.jpg",
     alt: "Site plan rendering of the proposed outdoor recreation and nature center, showing a tree-lined green, pathways and a structure beside the bayou",
     caption: "Proposed outdoor recreation center and kayak launch",
-    body: "An outdoor recreation and nature center with a kayak launch, sitting between the Bike Fun Park and the water. Still a proposal — the location is identified, the building is not yet funded.",
+    body: "An outdoor recreation and nature center with a kayak launch, sitting between the Bike Fun Park and the water. The location is identified, and the building remains a proposal.",
   },
   {
     kicker: "Trail connection",
@@ -496,7 +456,7 @@ export default function Home() {
             <p>
               Three public landings, a connected trail corridor, and nine miles
               of open water through the heart of Pine Bluff. Some of it is
-              finished. Most of it is drawn, permitted, and waiting on funding.
+              finished. The remaining elements are planned as future phases.
             </p>
           </div>
 
@@ -565,76 +525,6 @@ export default function Home() {
                 enough to hold a wedding.
               </p>
             </div>
-          </div>
-
-          <div className="progress-block">
-            <h3 className="block-title">Where the money stands</h3>
-            <div className="progress-figures">
-              <div>
-                <strong>{usd(totalRaised)}</strong>
-                <span>committed to date</span>
-              </div>
-              <div>
-                <strong>{usd(totalCost)}</strong>
-                <span>total project cost</span>
-              </div>
-              <div className="progress-gap">
-                <strong>{usd(stillNeeded)}</strong>
-                <span>still to raise</span>
-              </div>
-            </div>
-            <div
-              className="progress-meter"
-              role="img"
-              aria-label={`${percentFunded} percent funded: ${usd(totalRaised)} committed of ${usd(totalCost)}`}
-            >
-              <span style={{ width: `${percentFunded}%` }} />
-            </div>
-            <p className="progress-caption">
-              {percentFunded}% funded · includes cash grants, private gifts and
-              donated land
-            </p>
-
-            <div className="ledger">
-              <div className="ledger-column">
-                <h4>Committed · {usd(totalRaised)}</h4>
-                <table>
-                  <caption className="visually-hidden">
-                    Funding committed to the Bayou Bartholomew Recreation
-                    Enhancement Plan by source
-                  </caption>
-                  <tbody>
-                    {raised.map((row) => (
-                      <tr key={row.source}>
-                        <th scope="row">{row.source}</th>
-                        <td>{usd(row.amount)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="ledger-column">
-                <h4>Where it goes · {usd(totalCost)}</h4>
-                <table>
-                  <caption className="visually-hidden">
-                    Full project cost of the Bayou Bartholomew Recreation
-                    Enhancement Plan by line item
-                  </caption>
-                  <tbody>
-                    {costs.map((row) => (
-                      <tr key={row.item}>
-                        <th scope="row">{row.item}</th>
-                        <td>{usd(row.amount)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <a className="button button-light" href="#donate">
-              Help close the gap <span aria-hidden="true">↗</span>
-            </a>
           </div>
 
           <div className="ledgers-narrative">
@@ -822,15 +712,14 @@ export default function Home() {
         <div className="donate-inner">
           <div className="donate-heading">
             <p className="section-label section-label-light">08 · Support the project</p>
-            <h2>{usd(stillNeeded)} stands between here and finished.</h2>
+            <h2>Help carry the work forward.</h2>
             <p>
-              Every gift goes into the ground: gravel and clay for the pathway,
-              steel for the bridges, benches, signs, and fish in the water. Give
-              once, or give monthly and carry a piece of it all year.
+              If you would like to support the continuing work along Bayou
+              Bartholomew, use the giving option below.
             </p>
           </div>
 
-          <div className="donate-panel">
+          <div className="donate-panel donate-panel-single">
             {donationIsLive ? (
               <div className="donate-embed">
                 <iframe
@@ -843,8 +732,7 @@ export default function Home() {
               </div>
             ) : (
               /* TODO: giving is not open yet. Set `provider` and `embedUrl` in
-                 app/config/donation.ts and this becomes the live donation form —
-                 one-time and monthly, with the tiers below as suggested amounts. */
+                 app/config/donation.ts and this becomes the live donation form. */
               <div className="donate-soon">
                 <p className="donate-soon-title">Giving opens soon.</p>
                 <p>
@@ -862,27 +750,6 @@ export default function Home() {
               </div>
             )}
 
-            <div className="donate-tiers">
-              <h3>What a gift does</h3>
-              <ul>
-                {donation.tiers.map((tier) => (
-                  <li key={tier.amount}>
-                    <strong>{usd(tier.amount)}</strong>
-                    <span>{tier.label}</span>
-                  </li>
-                ))}
-              </ul>
-              {donation.recurringEnabled ? (
-                <p className="donate-recurring">
-                  Monthly giving will be available alongside one-time gifts.
-                </p>
-              ) : null}
-              <p className="donate-fineprint">
-                {donation.nonprofit.name}
-                {donation.nonprofit.ein ? ` · EIN ${donation.nonprofit.ein}` : ""}
-                . {donation.nonprofit.deductibilityNote}
-              </p>
-            </div>
           </div>
         </div>
       </section>
