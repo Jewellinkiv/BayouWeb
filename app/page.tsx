@@ -1,4 +1,3 @@
-import { createElement } from "react";
 import type { Metadata } from "next";
 import {
   donation,
@@ -735,29 +734,14 @@ export default function Home() {
             {donationIsLive ? (
               <div className="donate-embed" style={{ minHeight: donation.embedHeight }}>
                 {donation.provider === "donorbox" ? (
-                  <>
-                    {/* Donorbox widget. The script is hoisted and de-duplicated by
-                        React; the custom element is created without JSX so we do
-                        not have to declare it as an intrinsic element. */}
-                    <script
-                      type="module"
-                      src="https://donorbox.org/widgets.js"
-                      async
-                    />
-                    {createElement("dbox-widget", {
-                      campaign: donation.donorboxCampaign,
-                      type: "donation_form",
-                      "enable-auto-scroll": "true",
-                    })}
-                    <noscript>
-                      <a
-                        className="button button-primary"
-                        href={`https://donorbox.org/${donation.donorboxCampaign}`}
-                      >
-                        Donate <span aria-hidden="true">↗</span>
-                      </a>
-                    </noscript>
-                  </>
+                  <iframe
+                    className="donorbox-widget-frame"
+                    src={`https://donorbox.org/embed/${donation.donorboxCampaign}`}
+                    title="Donate to the Bayou Bartholomew Waterways Project"
+                    height={donation.embedHeight}
+                    loading="lazy"
+                    allow="payment"
+                  />
                 ) : (
                   <iframe
                     src={donation.embedUrl}
