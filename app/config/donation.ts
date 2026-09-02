@@ -23,19 +23,22 @@ export type DonationProvider =
   | "paypal";
 
 export const donation = {
-  /** TODO: set once the payment account is open (see file header). */
-  provider: "none" as DonationProvider,
+  provider: "donorbox" as DonationProvider,
 
   /**
-   * TODO: paste the provider's hosted form / embed URL here.
-   * Zeffy:    https://www.zeffy.com/embed/donation-form/<id>
-   * DonorBox: https://donorbox.org/embed/<campaign-slug>
-   * Stripe:   https://donate.stripe.com/<link-id>
-   * PayPal:   https://www.paypal.com/donate?hosted_button_id=<id>
+   * Donorbox campaign slug — the `campaign` attribute from the embed snippet
+   * Donorbox gives you under Campaigns > Share > Embed.
+   * The widget script is loaded from donorbox.org; nothing else is needed.
+   */
+  donorboxCampaign: "bayou-bartholomew-waterways-website-donors",
+
+  /**
+   * Only used by providers that embed as a plain iframe (Zeffy, Stripe payment
+   * links, PayPal). Leave empty while `provider` is "donorbox".
    */
   embedUrl: "",
 
-  /** Height of the embedded form iframe, in pixels. */
+  /** Minimum height reserved for the embedded form, in pixels. */
   embedHeight: 900,
 
   /** Suggested gift amounts, tied to real line items in the budget. */
@@ -53,7 +56,7 @@ export const donation = {
   contactEmail: "info@bayoubartholomew.com", // TODO: confirm the real address
 
   nonprofit: {
-    name: "Bayou Bartholomew Alliance",
+    name: "Bayou Bartholomew Waterways Project, Inc.",
     /** TODO: add the EIN once the nonprofit documentation is complete. */
     ein: "",
     /**
@@ -86,9 +89,11 @@ the United States — right here in Pine Bluff.
 No goods or services were provided in exchange for this contribution.`,
 } as const;
 
-/** True once a real processor and embed URL are configured. */
+/** True once a real processor is configured. */
 export const donationIsLive =
-  donation.provider !== "none" && donation.embedUrl.length > 0;
+  donation.provider === "donorbox"
+    ? donation.donorboxCampaign.length > 0
+    : donation.provider !== "none" && donation.embedUrl.length > 0;
 
 /**
  * Volunteer form endpoint.
