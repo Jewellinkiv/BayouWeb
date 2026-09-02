@@ -132,7 +132,7 @@ export default function Home() {
             <a href="#project">The project</a>
             <a href="#explore">Explore</a>
             <a href="#get-involved">Get involved</a>
-            <a className="nav-cta" href="#donate">Donate</a>
+            <a className="nav-cta" href="#donation-form">Donate</a>
           </nav>
         </header>
 
@@ -731,7 +731,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="donate-panel donate-panel-single">
+          <div className="donate-panel donate-panel-single" id="donation-form">
             {donationIsLive ? (
               <div className="donate-embed" style={{ minHeight: donation.embedHeight }}>
                 {donation.provider === "donorbox" ? (
@@ -827,7 +827,7 @@ export default function Home() {
 
       <div className="action-bar">
         <a className="action-bar-secondary" href="#get-involved">Volunteer</a>
-        <a className="action-bar-primary" href="#donate">Donate</a>
+        <a className="action-bar-primary" href="#donation-form">Donate</a>
       </div>
     </main>
   );
